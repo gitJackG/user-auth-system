@@ -8,8 +8,6 @@ const options = {
   withCredentials: true,
 };
 
-// create a separate client for refreshing the access token
-// to avoid infinite loops with the error interceptor
 const TokenRefreshClient = axios.create(options);
 TokenRefreshClient.interceptors.response.use((response) => response.data);
 
@@ -21,20 +19,14 @@ API.interceptors.response.use(
     const { config, response } = error;
     const { status, data } = response || {};
 
-    // try to refresh the access token behind the scenes
     if (status === UNAUTHORIZED && data?.errorCode === "InvalidAccessToken") {
       try {
-        // refresh the access token, then retry the original request
         await TokenRefreshClient.get("/auth/refresh");
         return TokenRefreshClient(config);
       } catch (error) {
-        // If we are already on the signin or signup page, we don't want to clear the cache
-        // or redirect, as this can cause an infinite loop if the page itself fetches user data.
         if (window.location.pathname === "/signin" || window.location.pathname === "/signup") {
           return Promise.reject({ status, ...data });
         }
-
-        // handle refresh errors by clearing the query cache & redirecting to login
         queryClient.clear();
         navigate("/signin", {
           state: {
