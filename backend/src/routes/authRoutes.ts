@@ -12,7 +12,6 @@ import { loginLimiter, registerLimiter } from "../middlewares/rateLimiter";
 
 const authRoutes = Router();
 
-// prefix: /auth
 authRoutes.post("/register", registerLimiter, registerHandler);
 authRoutes.post("/login", loginLimiter, loginHandler);
 authRoutes.get("/refresh", refreshHandler);

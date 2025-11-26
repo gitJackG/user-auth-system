@@ -8,3 +8,8 @@ export const getUserHandler = catchErrors(async (req, res) => {
   appAssert(user, NOT_FOUND, "User not found");
   return res.status(OK).json(user.omitPassword());
 });
+
+export const getAllUsers = catchErrors(async (req, res) => {
+  const count = await UserModel.countDocuments();
+  return res.status(OK).json({count});
+});
