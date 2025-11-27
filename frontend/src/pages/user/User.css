@@ -29,7 +29,7 @@
 .user-sign-out-btn {
   padding: 10px 24px;
   border: none;
-  background-color: #bf0000;
+  background-color: #008cbf;
   color: #fff;
   border-radius: 12px;
   cursor: pointer;
@@ -37,7 +37,7 @@
 }
 
 .user-sign-out-btn:hover {
-  background-color: #8a0000;
+  background-color: #005f8a;
   transform: scale(1.05);
 }
 
@@ -86,5 +86,24 @@
 }
 
 .oauth-btn:active {
+  transform: scale(.95);
+}
+
+.user-delete-account-btn {
+  padding: 10px 24px;
+  border: none;
+  background-color: #bf0000;
+  color: #fff;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+}
+
+.user-delete-account-btn:hover {
+  background-color: #8a0000;
+  transform: scale(1.05);
+}
+
+.user-delete-account-btn:active {
   transform: scale(.95);
 }

@@ -1,5 +1,7 @@
 import { CREATED, OK, UNAUTHORIZED } from "../constants/http";
 import SessionModel from "../models/sessionModel";
+import UserModel from "../models/userModel";
+import AuthProviderModel from "../models/authProviderModel";
 import {
   createAccount,
   loginUser,
@@ -42,32 +44,25 @@ export const loginHandler = catchErrors(async (req, res) => {
     userAgent: req.headers["user-agent"],
   });
   const { accessToken, refreshToken } = await loginUser(request);
-
-
   return setAuthCookies({ res, accessToken, refreshToken })
     .status(OK)
     .json({ message: "Login successful" });
 });
 
 export const logoutHandler = catchErrors(async (req, res) => {
-  const accessToken = req.cookies.accessToken as string | undefined;
-  const { payload } = verifyToken(accessToken || "");
-
-  if (payload) {
-
-    await SessionModel.findByIdAndDelete(payload.sessionId);
-  }
-
-
+  const accessToken = req.cookies.accessToken;
+  appAssert(accessToken, UNAUTHORIZED, "Not authorized");
+  const { payload } = verifyToken(accessToken);
+  appAssert(payload, UNAUTHORIZED, "Invalid access token");
+  await SessionModel.findByIdAndDelete(payload.sessionId);
   return clearAuthCookies(res)
     .status(OK)
     .json({ message: "Logout successful" });
 });
 
 export const refreshHandler = catchErrors(async (req, res) => {
-  const refreshToken = req.cookies.refreshToken as string | undefined;
+  const refreshToken = req.cookies.refreshToken;
   appAssert(refreshToken, UNAUTHORIZED, "Missing refresh token");
-
   const { accessToken, newRefreshToken } = await refreshUserAccessToken(
     refreshToken
   );
@@ -82,26 +77,34 @@ export const refreshHandler = catchErrors(async (req, res) => {
 
 export const verifyEmailHandler = catchErrors(async (req, res) => {
   const verificationCode = verificationCodeSchema.parse(req.params.code);
-
   await verifyEmail(verificationCode);
-
   return res.status(OK).json({ message: "Email was successfully verified" });
 });
 
 export const sendPasswordResetHandler = catchErrors(async (req, res) => {
   const email = emailSchema.parse(req.body.email);
-
   await sendPasswordResetEmail(email);
-
   return res.status(OK).json({ message: "Password reset email sent" });
 });
 
 export const resetPasswordHandler = catchErrors(async (req, res) => {
   const request = resetPasswordSchema.parse(req.body);
-
   await resetPassword(request);
-
   return clearAuthCookies(res)
     .status(OK)
     .json({ message: "Password was reset successfully" });
+});
+
+export const deleteHandler = catchErrors(async (req, res) => {
+  const accessToken = req.cookies.accessToken;
+  appAssert(accessToken, UNAUTHORIZED, "Not authorized");
+  const { payload } = verifyToken(accessToken);
+  appAssert(payload, UNAUTHORIZED, "Invalid access token");
+  const userId = payload.userId;
+  await SessionModel.deleteMany({ userId });
+  await AuthProviderModel.deleteMany({ userId });
+  await UserModel.findByIdAndDelete(userId);
+  return clearAuthCookies(res)
+    .status(OK)
+    .json({ message: "Account deleted successfully" });
 });

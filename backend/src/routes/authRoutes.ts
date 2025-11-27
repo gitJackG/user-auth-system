@@ -7,10 +7,11 @@ import {
   registerHandler,
   resetPasswordHandler,
   verifyEmailHandler,
+  deleteHandler,
 } from "../controllers/authController";
 import { loginLimiter, registerLimiter } from "../middlewares/rateLimiter";
 import passport from "../services/oauthService";
-import { googleOAuthHandler, googleUnlinkHandler, githubOAuthHandler, githubUnlinkHandler } from "../controllers/oauthController";
+import { googleOAuthHandler, googleUnlinkHandler, githubOAuthHandler, githubUnlinkHandler, discordOAuthHandler, discordUnlinkHandler } from "../controllers/oauthController";
 
 
 const authRoutes = Router();
@@ -22,6 +23,7 @@ authRoutes.get("/logout", logoutHandler);
 authRoutes.get("/email/verify/:code", verifyEmailHandler);
 authRoutes.post("/password/forgot", loginLimiter, sendPasswordResetHandler);
 authRoutes.post("/password/reset", loginLimiter, resetPasswordHandler);
+authRoutes.delete("/delete", deleteHandler);
 
 authRoutes.get(
   "/google",
@@ -57,5 +59,23 @@ authRoutes.get(
 );
 
 authRoutes.delete("/github", githubUnlinkHandler);
+
+authRoutes.get(
+  "/discord",
+  loginLimiter,
+  (req, res, next) => {
+    const state = req.query.link === "1" ? "link=1" : undefined;
+    passport.authenticate("discord", { scope: ["identify", "email"], state })(req, res, next);
+  }
+);
+
+authRoutes.get(
+  "/discord/callback",
+  loginLimiter,
+  passport.authenticate("discord", { session: false }),
+  discordOAuthHandler
+);
+
+authRoutes.delete("/discord", discordUnlinkHandler);
 
 export default authRoutes;

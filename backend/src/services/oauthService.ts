@@ -1,11 +1,14 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as GitHubStrategy } from "passport-github2";
+import { Strategy as DiscordStrategy } from "passport-discord";
 import {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
+  DISCORD_CLIENT_ID,
+  DISCORD_CLIENT_SECRET,
   BACKEND_ORIGIN,
 } from "../constants/env";
 
@@ -30,6 +33,20 @@ passport.use(
       clientSecret: GITHUB_CLIENT_SECRET,
       callbackURL: `${BACKEND_ORIGIN}/auth/github/callback`,
       scope: ["user:email"],
+    },
+    (accessToken: any, refreshToken: any, profile: any, done: (arg0: null, arg1: { profile: any; accessToken: any; refreshToken: any; }) => void) => {
+      done(null, { profile, accessToken, refreshToken });
+    }
+  )
+);
+
+passport.use(
+  new DiscordStrategy(
+    {
+      clientID: DISCORD_CLIENT_ID,
+      clientSecret: DISCORD_CLIENT_SECRET,
+      callbackURL: `${BACKEND_ORIGIN}/auth/discord/callback`,
+      scope: ["identify", "email"],
     },
     (accessToken: any, refreshToken: any, profile: any, done: (arg0: null, arg1: { profile: any; accessToken: any; refreshToken: any; }) => void) => {
       done(null, { profile, accessToken, refreshToken });

@@ -20,3 +20,8 @@ export const unlinkGoogle = async () => API.delete("/auth/google");
 export const githubLink = () => { window.location.href = `${API.defaults.baseURL}/auth/github?link=1`; };
 export const githubStart = () => { window.location.href = `${API.defaults.baseURL}/auth/github` };
 export const unlinkGithub = async () => API.delete("/auth/github");
+export const discordLink = () => { window.location.href = `${API.defaults.baseURL}/auth/discord?link=1`; };
+export const discordStart = () => { window.location.href = `${API.defaults.baseURL}/auth/discord` };
+export const unlinkDiscord = async () => API.delete("/auth/discord");
+
+export const deleteAccount = async () => API.delete("/auth/delete");
