@@ -14,7 +14,6 @@
 }
 
 .signup-form {
-  width: 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -72,4 +71,11 @@
   justify-content: center;
   align-items: center;
   gap: .5rem;
+}
+
+
+@media (max-width: 525px) {
+  .signup-container {
+    width: 100%;
+  }
 }

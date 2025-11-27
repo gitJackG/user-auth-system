@@ -7,24 +7,23 @@ import useAuth from "../../../hooks/useAuth";
 
 export default function SignUp() {
   const { user } = useAuth();
+  const [serverError, setServerError] = useState<string | null>(null);
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [showErrors, setShowErrors] = useState(false);
-  const {
-    mutate: createAccount,
-  } = useMutation({
+  const { mutate: createAccount } = useMutation({
     mutationFn: register,
     onSuccess: () => {
-      navigate("/", {
-        replace: true,
-      });
+      navigate("/", { replace: true });
     },
-    onError: (error) => {
-      console.log(error);
+    onError: (error: any) => {
+      const msg = "Email already in use";
+      setServerError(msg);
     },
   });
+
 
   const arePasswordsMatching = password != "" && confirmPassword != "" && password === confirmPassword;
   const isValidEmail = email != "" && email.includes("@") && email.includes(".");
@@ -49,6 +48,7 @@ export default function SignUp() {
         <input className="signup-input" type="password" placeholder="password" onChange={(e) => { setPassword(e.target.value); }} />
         <input className="signup-input" type="password" placeholder="confirm password" onChange={(e) => { setConfirmPassword(e.target.value) }} />
         <div className="signup-errors">
+          {serverError ? <p className="signup-password-mismatch">{serverError}</p> : <></>}
           {showErrors && !isValidEmail ? <p className="signup-password-mismatch">email is invalid</p> : <></>}
           {showErrors && !isValidPassword ? <p className="signup-password-mismatch">password is invalid (min 8 characters)</p> : <></>}
           {showErrors && !arePasswordsMatching ? <p className="signup-password-mismatch">passwords do not match</p> : <></>}
