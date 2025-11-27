@@ -19,3 +19,5 @@ export const EMAIL_SENDER = getEnv("EMAIL_SENDER");
 export const RESEND_API_KEY = getEnv("RESEND_API_KEY");
 export const GOOGLE_CLIENT_ID = getEnv("GOOGLE_CLIENT_ID");
 export const GOOGLE_CLIENT_SECRET = getEnv("GOOGLE_CLIENT_SECRET");
+export const GITHUB_CLIENT_ID = getEnv("GITHUB_CLIENT_ID");
+export const GITHUB_CLIENT_SECRET = getEnv("GITHUB_CLIENT_SECRET");

@@ -23,21 +23,22 @@ export default function ResetPassword() {
     const linkIsValid = code && exp && exp > now;
     return (
         <div className="reset-password-container">
+            <h1>Reset Password</h1>
             {linkIsValid ? (
-                <div>
-                    <input type="text" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
-                    <button onClick={() => resetUserPassword({ verificationCode: code, password })}>reset password</button>
+                <div className="reset-password-form">
+                    <input className="reset-password-input" type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
+                    <button className="reset-password-btn" onClick={() => resetUserPassword({ verificationCode: code, password })}>reset password</button>
                     {isPending && <p>loading...</p>}
                     {isSuccess &&
-                        <div>
-                            <p>password reset</p>
+                        <div className="reset-password-success">
+                            <p>password reset successfully</p>
                             <Link to="/signin">Sign In</Link>
                         </div>
                     }
                     {isError && <p>{error.message}</p>}
                 </div>
             ) : (
-                <div>
+                <div className="reset-password-form">
                     <p>link is invalid</p>
                     <p>request a new link</p>
                     <Link to="/password/forgot">forgot password</Link>

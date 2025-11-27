@@ -3,7 +3,7 @@ import { TOO_MANY_REQUESTS } from "../constants/http";
 
 export const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 5,
+    max: 15,
     message: {
         message: "Too many login attempts, please try again after 15 minutes",
     },
@@ -14,7 +14,7 @@ export const loginLimiter = rateLimit({
 
 export const registerLimiter = rateLimit({
     windowMs: 60 * 60 * 1000,
-    max: 5,
+    max: 15,
     message: {
         message: "Too many accounts created from this IP, please try again after an hour",
     },

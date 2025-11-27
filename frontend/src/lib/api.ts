@@ -17,3 +17,6 @@ export const deleteSession = async (id: string) => API.delete(`/sessions/${id}`)
 export const googleLink = () => { window.location.href = `${API.defaults.baseURL}/auth/google?link=1`; };
 export const googleStart = () => { window.location.href = `${API.defaults.baseURL}/auth/google` };
 export const unlinkGoogle = async () => API.delete("/auth/google");
+export const githubLink = () => { window.location.href = `${API.defaults.baseURL}/auth/github?link=1`; };
+export const githubStart = () => { window.location.href = `${API.defaults.baseURL}/auth/github` };
+export const unlinkGithub = async () => API.delete("/auth/github");

@@ -1,8 +1,8 @@
-.signup-container{
+.signup-container {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   height: 50svh;
   width: 50svw;
   display: flex;
@@ -10,15 +10,66 @@
   justify-content: center;
   align-items: center;
   user-select: none;
+  gap: 1rem;
 }
 
-.signup-form{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: start;
+.signup-form {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 
-.signup-question{
-    display: flex;
+.signup-question {
+  display: flex;
+  gap: .5rem;
+}
+
+.signup-input {
+  padding: 1rem;
+  height: 40px;
+  width: 100%;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.signup-btn {
+  padding: 10px 24px;
+  border: none;
+  background-color: #008cbf;
+  color: #fff;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+}
+
+.signup-btn:hover {
+  background-color: #005f8a;
+  transform: scale(1.05);
+}
+
+.signup-btn:active {
+  transform: scale(.95);
+}
+
+.signup-question-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup-password-mismatch {
+  color: red;
+}
+
+.signup-errors {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
 }

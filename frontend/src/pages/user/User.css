@@ -1,13 +1,90 @@
-.user-container{
+.user-container {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   height: 50svh;
   width: 50svw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  user-select: none;
+}
+
+.user-profile {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
+  gap: .5rem;
+}
+
+.user-app-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.user-sign-out-btn {
+  padding: 10px 24px;
+  border: none;
+  background-color: #bf0000;
+  color: #fff;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .2s ease-in-out;
+}
+
+.user-sign-out-btn:hover {
+  background-color: #8a0000;
+  transform: scale(1.05);
+}
+
+.user-sign-out-btn:active {
+  transform: scale(.95);
+}
+
+.unlinked-accounts {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  user-select: none;
+  gap: .5rem;
+}
+
+.user-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.linked-accounts {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+}
+
+.oauth-btn {
+  display: flex;
+  height: 48px;
+  width: 48px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 2px solid #ccc;
+  padding: .2rem;
+  transition: all .2s ease-in-out;
+}
+
+.oauth-btn:hover {
+  transform: scale(1.05);
+}
+
+.oauth-btn:active {
+  transform: scale(.95);
 }

@@ -11,6 +11,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [showErrors, setShowErrors] = useState(false);
   const {
     mutate: createAccount,
   } = useMutation({
@@ -20,17 +21,39 @@ export default function SignUp() {
         replace: true,
       });
     },
+    onError: (error) => {
+      console.log(error);
+    },
   });
+
+  const arePasswordsMatching = password != "" && confirmPassword != "" && password === confirmPassword;
+  const isValidEmail = email != "" && email.includes("@") && email.includes(".");
+  const isValidPassword = password != "" && password.length >= 8;
+  const handleSubmit = () => {
+    if (!arePasswordsMatching || !isValidEmail || !isValidPassword) {
+      console.log("invalid email or password");
+      setShowErrors(true);
+      return;
+    }
+    createAccount({ email, password, confirmPassword });
+  };
 
   if (user) {
     return <Navigate to="/" replace />;
   }
   return (
     <div className='signup-container'>
+      <h1>Sign Up</h1>
       <div className="signup-form">
-        <input type="text" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
-        <input type="text" placeholder="password" onChange={(e) => { setPassword(e.target.value); setConfirmPassword(e.target.value) }} />
-        <button onClick={() => createAccount({ email, password, confirmPassword })}>submit</button>
+        <input className="signup-input" type="email" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
+        <input className="signup-input" type="password" placeholder="password" onChange={(e) => { setPassword(e.target.value); }} />
+        <input className="signup-input" type="password" placeholder="confirm password" onChange={(e) => { setConfirmPassword(e.target.value) }} />
+        <div className="signup-errors">
+          {showErrors && !isValidEmail ? <p className="signup-password-mismatch">email is invalid</p> : <></>}
+          {showErrors && !isValidPassword ? <p className="signup-password-mismatch">password is invalid (min 8 characters)</p> : <></>}
+          {showErrors && !arePasswordsMatching ? <p className="signup-password-mismatch">passwords do not match</p> : <></>}
+        </div>
+        <button className="signup-btn" onClick={handleSubmit}>submit</button>
       </div>
       <div className="signup-question">
         <p>already have an account?</p>

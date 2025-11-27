@@ -10,7 +10,7 @@ import {
 } from "../controllers/authController";
 import { loginLimiter, registerLimiter } from "../middlewares/rateLimiter";
 import passport from "../services/oauthService";
-import { googleOAuthHandler, googleUnlinkHandler } from "../controllers/oauthController";
+import { googleOAuthHandler, googleUnlinkHandler, githubOAuthHandler, githubUnlinkHandler } from "../controllers/oauthController";
 
 
 const authRoutes = Router();
@@ -39,5 +39,23 @@ authRoutes.get(
 );
 
 authRoutes.delete("/google", googleUnlinkHandler);
+
+authRoutes.get(
+  "/github",
+  loginLimiter,
+  (req, res, next) => {
+    const state = req.query.link === "1" ? "link=1" : undefined;
+    passport.authenticate("github", { scope: ["user:email"], state })(req, res, next);
+  }
+);
+
+authRoutes.get(
+  "/github/callback",
+  loginLimiter,
+  passport.authenticate("github", { session: false }),
+  githubOAuthHandler
+);
+
+authRoutes.delete("/github", githubUnlinkHandler);
 
 export default authRoutes;

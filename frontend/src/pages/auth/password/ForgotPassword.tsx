@@ -19,13 +19,22 @@ export default function ForgotPassword() {
 
     return (
         <div className="forgot-password-container">
-            <input type="text" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
-            <button onClick={() => sendPasswordReset(email)}>Send Reset Email</button>
+            <h1 className="forgot-password-title">Forgot Password</h1>
+            <input className="forgot-password-input" type="text" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
+            <button className="forgot-password-btn" onClick={() => sendPasswordReset(email)}>Send Reset Email</button>
             {isPending && <p>loading...</p>}
             {isSuccess && <p>email sent</p>}
             {isError && <p>{error.message}</p>}
-            <Link to="/signin">Sign In</Link>
-            <Link to="/signup">Sign Up</Link>
+            <div className="forgot-password-question-area">
+                <div className="forgot-password-question">
+                    <p>don't have an account?</p>
+                    <Link to="/signup">signup</Link>
+                </div>
+                <div className="forgot-password-question">
+                    <p>already have an account?</p>
+                    <Link to="/signin">signin</Link>
+                </div>
+            </div>
         </div>
     );
 }
