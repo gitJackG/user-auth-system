@@ -43,7 +43,7 @@ export const loginHandler = catchErrors(async (req, res) => {
   });
   const { accessToken, refreshToken } = await loginUser(request);
 
-  // set cookies
+
   return setAuthCookies({ res, accessToken, refreshToken })
     .status(OK)
     .json({ message: "Login successful" });
@@ -54,11 +54,11 @@ export const logoutHandler = catchErrors(async (req, res) => {
   const { payload } = verifyToken(accessToken || "");
 
   if (payload) {
-    // remove session from db
+
     await SessionModel.findByIdAndDelete(payload.sessionId);
   }
 
-  // clear cookies
+
   return clearAuthCookies(res)
     .status(OK)
     .json({ message: "Logout successful" });

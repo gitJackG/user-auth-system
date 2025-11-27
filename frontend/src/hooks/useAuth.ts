@@ -3,7 +3,7 @@ import { getUser } from "../lib/api";
 
 export const AUTH = "auth";
 
-const useAuth = (opts = {}) => {
+const useAuth = (opts: any = {}) => {
   const { data: user, ...rest } = useQuery({
     queryKey: [AUTH],
     queryFn: getUser,

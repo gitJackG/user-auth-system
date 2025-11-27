@@ -3,7 +3,7 @@ import { getSessions } from "../lib/api";
 
 export const SESSIONS = "sessions";
 
-const useSessions = (opts = {}) => {
+const useSessions = (opts: any = {}) => {
   const { data: sessions = [], ...rest } = useQuery({
     queryKey: [SESSIONS],
     queryFn: getSessions,

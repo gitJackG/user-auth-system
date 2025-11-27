@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import "./SignUp.css"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { register } from "../../../lib/api";
 import useAuth from "../../../hooks/useAuth";
 
@@ -13,9 +13,6 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const {
     mutate: createAccount,
-    isPending,
-    isError,
-    error,
   } = useMutation({
     mutationFn: register,
     onSuccess: () => {
@@ -24,10 +21,6 @@ export default function SignUp() {
       });
     },
   });
-
-  useEffect(() => {
-    console.log(password, email)
-  }, [password, email])
 
   if (user) {
     return <Navigate to="/" replace />;

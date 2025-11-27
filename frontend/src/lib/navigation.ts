@@ -1,5 +1,7 @@
-export let navigate = () => { };
+import { NavigateFunction } from "react-router-dom";
 
-export const setNavigate = (fn) => {
+export let navigate: NavigateFunction = () => { };
+
+export const setNavigate = (fn: NavigateFunction) => {
   navigate = fn;
 };

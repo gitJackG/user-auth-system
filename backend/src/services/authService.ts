@@ -38,7 +38,6 @@ type CreateAccountParams = {
   userAgent?: string;
 };
 export const createAccount = async (data: CreateAccountParams) => {
-  // verify email is not taken
   const existingUser = await UserModel.exists({
     email: data.email,
   });
@@ -57,17 +56,13 @@ export const createAccount = async (data: CreateAccountParams) => {
 
   const url = `${APP_ORIGIN}/email/verify/${verificationCode._id}`;
 
-  console.log(user.email);
-
-  // send verification email
   const { error } = await sendMail({
     to: user.email,
     ...getVerifyEmailTemplate(url),
   });
-  // ignore email errors for now
+
   if (error) console.error(error);
 
-  // create session
   const session = await SessionModel.create({
     userId,
     userAgent: data.userAgent,
@@ -166,7 +161,6 @@ export const refreshUserAccessToken = async (refreshToken: string) => {
     "Session expired"
   );
 
-  // refresh the session if it expires in the next 24hrs
   const sessionNeedsRefresh = session.expiresAt.getTime() - now <= ONE_DAY_MS;
   if (sessionNeedsRefresh) {
     session.expiresAt = thirtyDaysFromNow();
@@ -175,11 +169,11 @@ export const refreshUserAccessToken = async (refreshToken: string) => {
 
   const newRefreshToken = sessionNeedsRefresh
     ? signToken(
-        {
-          sessionId: session._id,
-        },
-        refreshTokenSignOptions
-      )
+      {
+        sessionId: session._id,
+      },
+      refreshTokenSignOptions
+    )
     : undefined;
 
   const accessToken = signToken({
@@ -194,13 +188,10 @@ export const refreshUserAccessToken = async (refreshToken: string) => {
 };
 
 export const sendPasswordResetEmail = async (email: string) => {
-  // Catch any errors that were thrown and log them (but always return a success)
-  // This will prevent leaking sensitive data back to the client (e.g. user not found, email not sent).
   try {
     const user = await UserModel.findOne({ email });
     appAssert(user, NOT_FOUND, "User not found");
 
-    // check for max password reset requests (2 emails in 5min)
     const fiveMinAgo = fiveMinutesAgo();
     const count = await VerificationCodeModel.countDocuments({
       userId: user._id,
@@ -220,9 +211,8 @@ export const sendPasswordResetEmail = async (email: string) => {
       expiresAt,
     });
 
-    const url = `${APP_ORIGIN}/password/reset?code=${
-      verificationCode._id
-    }&exp=${expiresAt.getTime()}`;
+    const url = `${APP_ORIGIN}/password/reset?code=${verificationCode._id
+      }&exp=${expiresAt.getTime()}`;
 
     const { data, error } = await sendMail({
       to: email,
@@ -267,7 +257,6 @@ export const resetPassword = async ({
 
   await validCode.deleteOne();
 
-  // delete all sessions
   await SessionModel.deleteMany({ userId: validCode.userId });
 
   return { user: updatedUser.omitPassword() };

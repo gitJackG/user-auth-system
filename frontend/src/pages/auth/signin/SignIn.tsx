@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import "./SignIn.css"
-import { login } from "../../../lib/api";
+import { login, googleStart } from "../../../lib/api";
 import useAuth from "../../../hooks/useAuth";
 
 export default function SignIn() {
@@ -15,8 +15,7 @@ export default function SignIn() {
 
   const {
     mutate: signIn,
-    isPending,
-    isError,
+
   } = useMutation({
     mutationFn: login,
     onSuccess: () => {
@@ -36,6 +35,9 @@ export default function SignIn() {
         <input type="text" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
         <input type="text" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
         <button onClick={() => signIn({ email, password })}>enter</button>
+      </div>
+      <div className="signup-question">
+        <button onClick={googleStart}>sign in with google</button>
       </div>
       <div className="signup-question">
         <p>forgot password?</p>

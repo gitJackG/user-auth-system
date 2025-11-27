@@ -1,16 +1,19 @@
 import API from "../config/apiClient";
 
-export const register = async (data) => API.post("/auth/register", data);
-export const login = async (data) => API.post("/auth/login", data);
+export const register = async (data: any) => API.post("/auth/register", data);
+export const login = async (data: any) => API.post("/auth/login", data);
 export const logout = async () => API.get("/auth/logout");
-export const verifyEmail = async (verificationCode) =>
+export const verifyEmail = async (verificationCode: string) =>
   API.get(`/auth/email/verify/${verificationCode}`);
-export const sendPasswordResetEmail = async (email) =>
+export const sendPasswordResetEmail = async (email: string) =>
   API.post("/auth/password/forgot", { email });
-export const resetPassword = async ({ verificationCode, password }) =>
+export const resetPassword = async ({ verificationCode, password }: { verificationCode: string, password: string }) =>
   API.post("/auth/password/reset", { verificationCode, password });
 
 export const getUser = async () => API.get("/user");
 export const getAll = async () => API.get("/user/all");
 export const getSessions = async () => API.get("/sessions");
-export const deleteSession = async (id) => API.delete(`/sessions/${id}`);
+export const deleteSession = async (id: string) => API.delete(`/sessions/${id}`);
+export const googleLink = () => { window.location.href = `${API.defaults.baseURL}/auth/google?link=1`; };
+export const googleStart = () => { window.location.href = `${API.defaults.baseURL}/auth/google` };
+export const unlinkGoogle = async () => API.delete("/auth/google");
