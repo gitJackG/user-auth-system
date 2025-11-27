@@ -18,7 +18,7 @@ export default function SignUp() {
     onSuccess: () => {
       navigate("/", { replace: true });
     },
-    onError: (error: any) => {
+    onError: () => {
       const msg = "Email already in use";
       setServerError(msg);
     },

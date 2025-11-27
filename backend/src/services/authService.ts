@@ -261,3 +261,16 @@ export const resetPassword = async ({
 
   return { user: updatedUser.omitPassword() };
 };
+
+export const setPassword = async (password: string, email: string) => {
+  const user = await UserModel.findOne({ email });
+  appAssert(user, NOT_FOUND, "User not found");
+
+  const updatedUser = await UserModel.findOneAndUpdate({ email }, {
+    password: await hashValue(password),
+  }, { new: true });
+
+  appAssert(updatedUser, INTERNAL_SERVER_ERROR, "Failed to set password");
+
+  return { user: updatedUser.omitPassword() };
+};

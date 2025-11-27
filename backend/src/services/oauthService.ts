@@ -2,6 +2,7 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as GitHubStrategy } from "passport-github2";
 import { Strategy as DiscordStrategy } from "passport-discord";
+import { Strategy as FacebookStrategy } from "passport-facebook";
 import {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
@@ -9,6 +10,8 @@ import {
   GITHUB_CLIENT_SECRET,
   DISCORD_CLIENT_ID,
   DISCORD_CLIENT_SECRET,
+  FACEBOOK_CLIENT_ID,
+  FACEBOOK_CLIENT_SECRET,
   BACKEND_ORIGIN,
 } from "../constants/env";
 
@@ -47,6 +50,20 @@ passport.use(
       clientSecret: DISCORD_CLIENT_SECRET,
       callbackURL: `${BACKEND_ORIGIN}/auth/discord/callback`,
       scope: ["identify", "email"],
+    },
+    (accessToken: any, refreshToken: any, profile: any, done: (arg0: null, arg1: { profile: any; accessToken: any; refreshToken: any; }) => void) => {
+      done(null, { profile, accessToken, refreshToken });
+    }
+  )
+);
+
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: FACEBOOK_CLIENT_ID,
+      clientSecret: FACEBOOK_CLIENT_SECRET,
+      callbackURL: `${BACKEND_ORIGIN}/auth/facebook/callback`,
+      scope: ["email"],
     },
     (accessToken: any, refreshToken: any, profile: any, done: (arg0: null, arg1: { profile: any; accessToken: any; refreshToken: any; }) => void) => {
       done(null, { profile, accessToken, refreshToken });

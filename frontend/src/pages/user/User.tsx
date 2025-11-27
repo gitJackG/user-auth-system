@@ -1,11 +1,14 @@
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { logout, getAll, googleLink, unlinkGoogle, githubLink, unlinkGithub, discordLink, unlinkDiscord, deleteAccount } from "../../lib/api";
+import { logout, getAll, googleLink, unlinkGoogle, githubLink, unlinkGithub, discordLink, unlinkDiscord, facebookLink, unlinkFacebook, deleteAccount, setPassword } from "../../lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import "./User.css";
 import { useState, useEffect } from "react";
 
 export default function User() {
+  const [newPassword, setNewPassword] = useState("");
+  const [showErrors, setShowErrors] = useState(false);
+  const [isValidPassword, setIsValidPassword] = useState(false);
   const [isGoogleLinked, setIsGoogleLinked] = useState(false);
   const [isGithubLinked, setIsGithubLinked] = useState(false);
   const [isDiscordLinked, setIsDiscordLinked] = useState(false);
@@ -13,7 +16,7 @@ export default function User() {
   const { user } = useAuth();
   const userData = user as any;
 
-  const { email, verified, createdAt, providers } = userData || {};
+  const { email, password, verified, createdAt, providers } = userData || {};
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -22,6 +25,20 @@ export default function User() {
     queryKey: ["userCount"],
     queryFn: getAll,
   });
+
+  const handleSetPassword = async () => {
+    if (!isValidPassword) {
+      setShowErrors(true);
+      return;
+    }
+    try {
+      await setPassword(newPassword, email);
+      alert("Password set successfully!");
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || "An unexpected error occurred";
+      alert(msg);
+    }
+  };
 
   const count = (countData as any)?.count;
 
@@ -63,6 +80,13 @@ export default function User() {
 
   const { mutate: unlinkDiscordMutation } = useMutation({
     mutationFn: unlinkDiscord,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["auth"] });
+    },
+  });
+
+  const { mutate: unlinkFacebookMutation } = useMutation({
+    mutationFn: unlinkFacebook,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["auth"] });
     },
@@ -124,7 +148,7 @@ export default function User() {
             )}
 
             {isFacebookLinked && (
-              <button className="oauth-btn" onClick={() => unlinkGoogleMutation()}>
+              <button className="oauth-btn" onClick={() => unlinkFacebookMutation()}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
                   <path fill="#039be5" d="M24 5A19 19 0 1 0 24 43A19 19 0 1 0 24 5Z"></path>
                   <path fill="#fff" d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"></path>
@@ -163,7 +187,7 @@ export default function User() {
             )}
 
             {!isFacebookLinked && (
-              <button className="oauth-btn" onClick={googleLink}>
+              <button className="oauth-btn" onClick={facebookLink}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
                   <path fill="#039be5" d="M24 5A19 19 0 1 0 24 43A19 19 0 1 0 24 5Z"></path>
                   <path fill="#fff" d="M26.572,29.036h4.917l0.772-4.995h-5.69v-2.73c0-2.075,0.678-3.915,2.619-3.915h3.119v-4.359c-0.548-0.074-1.707-0.236-3.897-0.236c-4.573,0-7.254,2.415-7.254,7.917v3.323h-4.701v4.995h4.701v13.729C22.089,42.905,23.032,43,24,43c0.875,0,1.729-0.08,2.572-0.194V29.036z"></path>
@@ -173,6 +197,17 @@ export default function User() {
 
           </div>
         </div>
+
+        {password == null && (
+          <div className="user-section">
+            <p>Set a password to secure your account</p>
+            <div className="user-password-container">
+              <input className="user-password-input" type="password" placeholder="Set a password" onChange={(e) => { setNewPassword(e.target.value); setIsValidPassword(e.target.value.length >= 8); }} />
+              <button className="user-password-btn" onClick={() => handleSetPassword()}>Set password</button>
+              {showErrors && !isValidPassword ? <p className="signup-password-mismatch">password is invalid (min 8 characters)</p> : <></>}
+            </div>
+          </div>
+        )}
 
         <div className="user-section">
           <button className="user-sign-out-btn" onClick={() => signOutMutation()}>

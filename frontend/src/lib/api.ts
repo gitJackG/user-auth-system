@@ -23,5 +23,9 @@ export const unlinkGithub = async () => API.delete("/auth/github");
 export const discordLink = () => { window.location.href = `${API.defaults.baseURL}/auth/discord?link=1`; };
 export const discordStart = () => { window.location.href = `${API.defaults.baseURL}/auth/discord` };
 export const unlinkDiscord = async () => API.delete("/auth/discord");
+export const facebookLink = () => { window.location.href = `${API.defaults.baseURL}/auth/facebook?link=1`; };
+export const facebookStart = () => { window.location.href = `${API.defaults.baseURL}/auth/facebook` };
+export const unlinkFacebook = async () => API.delete("/auth/facebook");
+export const setPassword = async (password: string, email: string) => API.post("/auth/password/set", { password, email });
 
 export const deleteAccount = async () => API.delete("/auth/delete");

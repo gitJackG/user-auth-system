@@ -9,6 +9,7 @@ import {
   resetPassword,
   sendPasswordResetEmail,
   verifyEmail,
+  setPassword,
 } from "../services/authService";
 import appAssert from "../utils/appAssert";
 import {
@@ -25,6 +26,7 @@ import {
   registerSchema,
   resetPasswordSchema,
   verificationCodeSchema,
+  setPasswordSchema,
 } from "./authSchema";
 
 export const registerHandler = catchErrors(async (req, res) => {
@@ -107,4 +109,11 @@ export const deleteHandler = catchErrors(async (req, res) => {
   return clearAuthCookies(res)
     .status(OK)
     .json({ message: "Account deleted successfully" });
+});
+
+export const setPasswordHandler = catchErrors(async (req, res) => {
+  await setPassword(req.body.password, req.body.email);
+  return clearAuthCookies(res)
+    .status(OK)
+    .json({ message: "Password was set successfully" });
 });
