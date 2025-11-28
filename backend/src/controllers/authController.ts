@@ -95,17 +95,3 @@ export const resetPasswordHandler = catchErrors(async (req, res) => {
     .status(OK)
     .json({ message: "Password was reset successfully" });
 });
-
-export const deleteHandler = catchErrors(async (req, res) => {
-  const accessToken = req.cookies.accessToken;
-  appAssert(accessToken, UNAUTHORIZED, "Not authorized");
-  const { payload } = verifyToken(accessToken);
-  appAssert(payload, UNAUTHORIZED, "Invalid access token");
-  const userId = payload.userId;
-  await SessionModel.deleteMany({ userId });
-  await AuthProviderModel.deleteMany({ userId });
-  await UserModel.findByIdAndDelete(userId);
-  return clearAuthCookies(res)
-    .status(OK)
-    .json({ message: "Account deleted successfully" });
-});

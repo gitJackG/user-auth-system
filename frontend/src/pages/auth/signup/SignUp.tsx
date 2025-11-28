@@ -22,6 +22,7 @@ export default function SignUp() {
     },
     onError: () => {
       const msg = "Email already in use";
+      setShowErrors(true);
       setServerError(msg);
     },
   });

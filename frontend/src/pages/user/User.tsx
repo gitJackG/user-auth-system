@@ -1,6 +1,6 @@
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { logout, getAll, googleLink, unlinkGoogle, githubLink, unlinkGithub, discordLink, unlinkDiscord, facebookLink, unlinkFacebook, deleteAccount } from "../../lib/api";
+import { logout, getAll, googleStart, unlinkGoogle, githubStart, unlinkGithub, discordStart, unlinkDiscord, facebookStart, unlinkFacebook, deleteAccount } from "../../lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import "./User.css";
 import { useState, useEffect } from "react";
@@ -14,7 +14,6 @@ export default function User() {
   const userData = user as any;
 
   const { email, verified, createdAt, providers } = userData || {};
-
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -143,9 +142,9 @@ export default function User() {
                   <span className="account-name">Google</span>
                 </div>
                 {isGoogleLinked ? (
-                  <button className="action-btn unlink" onClick={() => unlinkGoogleMutation()}>Unlink</button>
+                  <button className="action-btn unlink" disabled={providers?.length === 1} onClick={() => unlinkGoogleMutation()}>Unlink</button>
                 ) : (
-                  <button className="action-btn link" onClick={googleLink}>Connect</button>
+                  <button className="action-btn link" onClick={googleStart}>Connect</button>
                 )}
               </div>
 
@@ -159,9 +158,9 @@ export default function User() {
                   <span className="account-name">GitHub</span>
                 </div>
                 {isGithubLinked ? (
-                  <button className="action-btn unlink" onClick={() => unlinkGithubMutation()}>Unlink</button>
+                  <button className="action-btn unlink" disabled={providers?.length === 1} onClick={() => unlinkGithubMutation()}>Unlink</button>
                 ) : (
-                  <button className="action-btn link" onClick={githubLink}>Connect</button>
+                  <button className="action-btn link" onClick={githubStart}>Connect</button>
                 )}
               </div>
 
@@ -176,9 +175,9 @@ export default function User() {
                   <span className="account-name">Discord</span>
                 </div>
                 {isDiscordLinked ? (
-                  <button className="action-btn unlink" onClick={() => unlinkDiscordMutation()}>Unlink</button>
+                  <button className="action-btn unlink" disabled={providers?.length === 1} onClick={() => unlinkDiscordMutation()}>Unlink</button>
                 ) : (
-                  <button className="action-btn link" onClick={discordLink}>Connect</button>
+                  <button className="action-btn link" onClick={discordStart}>Connect</button>
                 )}
               </div>
 
@@ -193,9 +192,9 @@ export default function User() {
                   <span className="account-name">Facebook</span>
                 </div>
                 {isFacebookLinked ? (
-                  <button className="action-btn unlink" onClick={() => unlinkFacebookMutation()}>Unlink</button>
+                  <button className="action-btn unlink" disabled={providers?.length === 1} onClick={() => unlinkFacebookMutation()}>Unlink</button>
                 ) : (
-                  <button className="action-btn link" onClick={facebookLink}>Connect</button>
+                  <button className="action-btn link" onClick={facebookStart}>Connect</button>
                 )}
               </div>
             </div>

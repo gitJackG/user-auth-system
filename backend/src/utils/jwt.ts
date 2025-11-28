@@ -59,6 +59,13 @@ export const verifyToken = <TPayload extends object = AccessTokenPayload>(
       return { error: "Invalid token payload" };
     }
 
+    const hasSessionId = "sessionId" in decoded;
+    const hasUserId = "userId" in decoded;
+
+    if (!hasSessionId && !hasUserId) {
+      return { error: "Invalid token structure" };
+    }
+
     return {
       payload: decoded as TPayload,
     };

@@ -19,36 +19,6 @@ export const googleOAuthHandler = catchErrors(async (req: Request, res: Response
   const googleId = profile.id;
   const email = profile._json?.email ?? profile.emails?.[0]?.value ?? null;
 
-  const isLink = req.query.link === "1" || req.query.state === "link=1";
-
-  if (isLink) {
-    const accessToken = req.cookies.accessToken as string | undefined;
-    appAssert(
-      accessToken,
-      UNAUTHORIZED,
-      "Not authorized",
-      AppErrorCode.InvalidAccessToken
-    );
-
-    const { error, payload } = verifyToken(accessToken);
-    appAssert(
-      payload,
-      UNAUTHORIZED,
-      error === "jwt expired" ? "Token expired" : "Invalid token",
-      AppErrorCode.InvalidAccessToken
-    );
-
-    const userId = payload.userId;
-
-    await AuthProviderModel.findOneAndUpdate(
-      { provider: "google", providerId: googleId },
-      { userId, provider: "google", providerId: googleId },
-      { upsert: true }
-    );
-
-    return res.redirect(`${APP_ORIGIN}/`);
-  }
-
   let providerLink = await AuthProviderModel.findOne({
     provider: "google",
     providerId: googleId,
@@ -121,7 +91,7 @@ export const googleUnlinkHandler = catchErrors(async (req, res) => {
     return res.status(404).json({ message: "Google provider not linked" });
   }
 
-  res.status(200).json({ message: "Discord account unlinked successfully" });
+  res.status(200).json({ message: "Google account unlinked successfully" });
 });
 
 export const githubOAuthHandler = catchErrors(async (req: Request, res: Response) => {
@@ -134,31 +104,6 @@ export const githubOAuthHandler = catchErrors(async (req: Request, res: Response
     profile.emails?.[0]?.value ??
     profile._json?.email ??
     null;
-
-  const isLink = req.query.link === "1" || req.query.state === "link=1";
-
-  if (isLink) {
-    const accessToken = req.cookies.accessToken as string | undefined;
-    appAssert(accessToken, UNAUTHORIZED, "Not authorized", AppErrorCode.InvalidAccessToken);
-
-    const { error, payload } = verifyToken(accessToken);
-    appAssert(
-      payload,
-      UNAUTHORIZED,
-      error === "jwt expired" ? "Token expired" : "Invalid token",
-      AppErrorCode.InvalidAccessToken
-    );
-
-    const userId = payload.userId;
-
-    await AuthProviderModel.findOneAndUpdate(
-      { provider: "github", providerId: githubId },
-      { userId, provider: "github", providerId: githubId },
-      { upsert: true }
-    );
-
-    return res.redirect(`${APP_ORIGIN}/`);
-  }
 
   let providerLink = await AuthProviderModel.findOne({
     provider: "github",
@@ -233,7 +178,7 @@ export const githubUnlinkHandler = catchErrors(async (req, res) => {
     return res.status(404).json({ message: "GitHub provider not linked" });
   }
 
-  res.status(200).json({ message: "Discord account unlinked successfully" });
+  res.status(200).json({ message: "GitHub account unlinked successfully" });
 });
 
 export const discordOAuthHandler = catchErrors(async (req: Request, res: Response) => {
@@ -242,26 +187,6 @@ export const discordOAuthHandler = catchErrors(async (req: Request, res: Respons
 
   const discordId = profile.id;
   const email = profile.email ?? null;
-
-  const isLink = req.query.link === "1" || req.query.state === "link=1";
-
-  if (isLink) {
-    const accessToken = req.cookies.accessToken;
-    appAssert(accessToken, UNAUTHORIZED, "Not authorized", AppErrorCode.InvalidAccessToken);
-
-    const { error, payload } = verifyToken(accessToken);
-    appAssert(payload, UNAUTHORIZED, error === "jwt expired" ? "Token expired" : "Invalid token", AppErrorCode.InvalidAccessToken);
-
-    const userId = payload.userId;
-
-    await AuthProviderModel.findOneAndUpdate(
-      { provider: "discord", providerId: discordId },
-      { userId, provider: "discord", providerId: discordId },
-      { upsert: true }
-    );
-
-    return res.redirect(`${APP_ORIGIN}/`);
-  }
 
   let providerLink = await AuthProviderModel.findOne({
     provider: "discord",
@@ -346,26 +271,6 @@ export const facebookOAuthHandler = catchErrors(async (req: Request, res: Respon
   const facebookId = profile.id;
   const email = profile.email ?? null;
 
-  const isLink = req.query.link === "1" || req.query.state === "link=1";
-
-  if (isLink) {
-    const accessToken = req.cookies.accessToken;
-    appAssert(accessToken, UNAUTHORIZED, "Not authorized", AppErrorCode.InvalidAccessToken);
-
-    const { error, payload } = verifyToken(accessToken);
-    appAssert(payload, UNAUTHORIZED, error === "jwt expired" ? "Token expired" : "Invalid token", AppErrorCode.InvalidAccessToken);
-
-    const userId = payload.userId;
-
-    await AuthProviderModel.findOneAndUpdate(
-      { provider: "facebook", providerId: facebookId },
-      { userId, provider: "facebook", providerId: facebookId },
-      { upsert: true }
-    );
-
-    return res.redirect(`${APP_ORIGIN}/`);
-  }
-
   let providerLink = await AuthProviderModel.findOne({
     provider: "facebook",
     providerId: facebookId
@@ -439,5 +344,5 @@ export const facebookUnlinkHandler = catchErrors(async (req, res) => {
     return res.status(404).json({ message: "Facebook provider not linked" });
   }
 
-  res.status(200).json({ message: "Discord account unlinked successfully" });
+  res.status(200).json({ message: "Facebook account unlinked successfully" });
 });

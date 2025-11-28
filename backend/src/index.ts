@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import connectToDatabase from "./config/db";
 import errorHandler from "./middlewares/errorMiddleware";
@@ -20,6 +21,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(helmet());
 app.use(cookieParser());
 
 app.get("/", (_, res) => {
