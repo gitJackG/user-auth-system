@@ -12,8 +12,6 @@ import sessionRoutes from "./routes/sessionRoutes";
 import { APP_ORIGIN, NODE_ENV, PORT } from "./constants/env";
 
 const app = express();
-
-// Trust proxy - required for rate limiting behind Render's reverse proxy
 app.set("trust proxy", 1);
 
 app.use(express.json());
