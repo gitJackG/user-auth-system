@@ -8,7 +8,6 @@ import {
   resetPasswordHandler,
   verifyEmailHandler,
   deleteHandler,
-  setPasswordHandler,
 } from "../controllers/authController";
 import { loginLimiter, registerLimiter } from "../middlewares/rateLimiter";
 import passport from "../services/oauthService";
@@ -25,11 +24,9 @@ authRoutes.get("/email/verify/:code", verifyEmailHandler);
 authRoutes.post("/password/forgot", loginLimiter, sendPasswordResetHandler);
 authRoutes.post("/password/reset", loginLimiter, resetPasswordHandler);
 authRoutes.delete("/delete", deleteHandler);
-authRoutes.post("/password/set", setPasswordHandler);
 
 authRoutes.get(
   "/google",
-  loginLimiter,
   (req, res, next) => {
     const state = req.query.link === "1" ? "link=1" : undefined;
     passport.authenticate("google", { scope: ["email", "profile"], state })(req, res, next);

@@ -5,13 +5,13 @@ import User from "../pages/user/User"
 
 export default function Hero() {
   const { user, isLoading } = useAuth();
-  return isLoading ?(
-    <div className='app-container'>
-      <h1>Loading...</h1>
+  return isLoading ? (
+    <div className='app-loading-container'>
+      <div className="app-spinner"></div>
     </div>
   ) : user ? (
-    <User/>
+    <User />
   ) : (
-    <Navigate to="/signin" replace state={{redirectUrl: window.location.pathname}}/>
+    <Navigate to="/signin" replace state={{ redirectUrl: window.location.pathname }} />
   )
 }

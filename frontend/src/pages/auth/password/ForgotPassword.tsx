@@ -27,12 +27,12 @@ export default function ForgotPassword() {
             {isError && <p>{error.message}</p>}
             <div className="forgot-password-question-area">
                 <div className="forgot-password-question">
-                    <p>don't have an account?</p>
-                    <Link to="/signup">signup</Link>
+                    <p>Don't have an account?</p>
+                    <Link to="/signup">Sign Up</Link>
                 </div>
                 <div className="forgot-password-question">
-                    <p>already have an account?</p>
-                    <Link to="/signin">signin</Link>
+                    <p>Already have an account?</p>
+                    <Link to="/signin">Sign In</Link>
                 </div>
             </div>
         </div>
