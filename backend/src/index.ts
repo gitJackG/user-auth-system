@@ -22,7 +22,13 @@ app.use(
     credentials: true,
   })
 );
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'none'"],
+    },
+  },
+}));
 app.use(cookieParser());
 
 app.get("/", (_, res) => {

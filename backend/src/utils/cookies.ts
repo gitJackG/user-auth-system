@@ -9,7 +9,7 @@ const isProd = NODE_ENV === "production";
 const defaults: CookieOptions = {
   httpOnly: true,
   secure: isProd,
-  sameSite: isProd ? "none" : "lax",
+  sameSite: isProd ? "strict" : "lax",
 };
 
 export const getAccessTokenCookieOptions = (): CookieOptions => ({
