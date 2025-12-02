@@ -39,7 +39,7 @@ app.get("/", (_, res) => {
 
 app.use("/auth", authRoutes);
 app.use("/sessions", authenticate, sessionRoutes);
-app.use("/user", authenticate, userRoutes);
+app.use("/user", userRoutes);
 
 app.use(errorHandler);
 

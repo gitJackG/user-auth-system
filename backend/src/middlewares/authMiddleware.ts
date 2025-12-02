@@ -4,7 +4,6 @@ import AppErrorCode from "../constants/appErrorCode";
 import { UNAUTHORIZED } from "../constants/http";
 import { verifyToken } from "../utils/jwt";
 
-
 const authenticate: RequestHandler = (req, res, next) => {
   const accessToken = req.cookies.accessToken as string | undefined;
   appAssert(
@@ -25,6 +24,14 @@ const authenticate: RequestHandler = (req, res, next) => {
   req.userId = payload.userId;
   req.sessionId = payload.sessionId;
   next();
+};
+
+export const optionalAuthenticate: RequestHandler = (req, res, next) => {
+  const accessToken = req.cookies.accessToken as string | undefined;
+  if (!accessToken) {
+    return next();
+  }
+  return authenticate(req, res, next);
 };
 
 export default authenticate;
