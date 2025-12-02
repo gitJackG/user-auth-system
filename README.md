@@ -2,7 +2,7 @@
 
 A production-ready, full-stack authentication system built with the MERN stack, featuring JWT-based sessions, OAuth integration, and comprehensive security measures.
 
-[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://your-app-frontend.vercel.app)
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://auth.jackgr.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > **Demo Project Notice**: This is a portfolio demonstration project. Do not use real passwords.
