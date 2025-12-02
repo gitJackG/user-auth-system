@@ -12,6 +12,11 @@ const ProjectAlert = () => {
                     Learn More →
                 </Link>
             </div>
+            <div className="project-alert-content">
+                <span className="project-alert-text">
+                    Please be aware that if you are opening this for the first time it can take up to a minute to load because the backend is hosted on render free tier.
+                </span>
+            </div>
         </div>
     );
 };
